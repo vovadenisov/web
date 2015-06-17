@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="backBody">
+    <div class = "row">
+        <div class="row">
+            {% block head %}
+                {% include "main/head.html"%}
+            {% endblock head%}
+        </div>
+
+        <div class="row">
+            <div class="col-xs-8 marCont">
+                {% block content %}
+                {% endblock content%}
+            </div>
+            <div class="col-xs-2">
+                {% block tags %}
+                    {% include "main/tags.html"%}
+                {% endblock tags%}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from cgi import parse_qs
+
+@csrf_exempt
+def index(request):
+    report = "Hello, world.++"
+    if request.method == 'GET':
+        report = 'Hello World! ' + request.method
+        for i in request.GET:
+            report += '<br>' + i + " = " + request.GET[i]
+    elif request.method == 'POST':
+        try:
+            size_of = int(request.get('CONTENT_LENGTH', 0))
+        except (ValueError):
+            size_of = 0
+        temp = request['wsgi.input'].read(size_of)
+        report += report['REQUEST_METHOD']
+        d = parse_qs(temp)
+        for i in d.keys():
+            report += '<br>' + i + ' = ' + d.get(i,[''])[0]
+    return HttpResponse(report)
+
+

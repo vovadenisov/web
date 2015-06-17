@@ -1,0 +1,11 @@
+{% extend "base.html"%}
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <img src="" alt="" class="img-thumbnail img-responsive">
+            </div>
+            <div class="row"></div>
+        </div>
+        <div class="col-md-9"></div>
+    </div>

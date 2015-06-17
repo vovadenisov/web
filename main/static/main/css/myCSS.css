@@ -1,0 +1,138 @@
+.ask{
+    margin-top: 25px;
+    padding: 10px;
+}
+
+.lLaik{
+    margin-left: 75%;
+}
+
+.rLaik{
+    margin-left: -34%;
+}
+
+.logo{
+    padding-left: 5%; color
+}
+
+.sear{
+    padding: 1%
+}
+
+.topCol{
+    background: #168de2;
+}
+
+.backAsk{
+    background-color: rgb(243, 247, 255);
+}
+
+.reit{
+    font-size: 140%;
+}
+
+.tags{
+    padding-top:2%
+}
+
+.marCont{
+    padding-top:1%;
+    margin-left:10%
+}
+
+.askBtn{
+    border-radius:0px;
+    margin-top:1%;
+    font-size: 120%;
+    box-shadow: 4px 7px 12px -5px #284b0a;
+}
+
+.myAvPage{
+    text-align: center;
+    margin-bottom: 4%;
+}
+
+.myAvTop{
+    margin-top:0%;
+}
+
+.userTName{
+    font-size: 24px;
+    margin-top: 3%;
+    color: white;
+}
+
+.clearM{
+    margin:0px
+}
+
+.clearP{
+    padding:0px;
+}
+
+.TopLogBtn{
+    color: white;
+    font-size: 110%;
+}
+
+.ques{
+    font-size:110%
+}
+
+.myTags{
+    position: fixed;
+    background-color:rgb(243, 247, 255);
+    font-size:110%;
+    margin-top: 3%;
+    width: 13%;
+    padding: 10px;
+    border-radius:10px
+}
+
+.pagMarg{
+    margin-left:40%
+}
+
+.topMarg5{
+    margin-top:4%
+}
+
+.answer{
+    border-bottom: 2px solid rgb(223, 221, 221);
+    padding: 2%;
+}
+
+.bestAns{
+    position: absolute;
+    bottom: -1%;
+    right: 2%;
+}
+
+.ansText{
+    margin-bottom: 4%
+}
+
+.wCol{
+    color:white
+}
+
+.registerTitle{
+    margin-left:26%
+}
+
+.questPad{
+    padding-left: 37%;
+}
+.myAvIm{
+    max-height:150px
+}
+
+.myAvTop{
+    max-height:80px;
+    margin-top:2%;
+}
+
+
+.none{
+    display:none;
+}

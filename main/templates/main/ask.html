@@ -1,0 +1,59 @@
+{% extends "main/base.html" %}
+{%block content%}
+<!-- ask блок -->
+<div class="row backAsk">
+    <div class="row questPad">
+        <h2>Добавить вопрос</h2>
+    </div>
+    <div class="row">
+        <div id="addQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <div class="row">
+                            <form class="form-horizontal" name="ask_form" onsubmit="return validate_ask ( );">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-3" for="title">Заголовок вопроса:</label>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="form-control" name="titleAsk" id="title" placeholder="Заголовок вопроса">
+                                        <div class="none" id="titleName">
+                                            <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            <span class="sr-only">(error)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment" class="control-label col-xs-3">Задайте свой вопрос:</label>
+                                    <div class="col-xs-9">
+                                        <textarea class="form-control" rows="15" name="contentAsk" id="comment"></textarea>
+                                        <div class="none" id="askContent">
+                                            <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            <span class="sr-only">(error)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-3" for="Tegs">Теги:</label>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="form-control" name="tagsAsk" id="Tegs" placeholder="Теги вопроса">
+                                        <div class="none" id="tagsAskId">
+                                            <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            <span class="sr-only">(error)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-xs-offset-3 col-xs-9">
+                                        <input type="submit" class="btn btn-primary" value="Задать вопрос">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock content%}

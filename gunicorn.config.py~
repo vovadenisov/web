@@ -1,0 +1,14 @@
+CONFIG = {
+'mode': 'wsgi',
+'working_dir': '/home/harry/ask_zotov',
+'python': '/usr/bin/python',
+'user': 'harry',
+'group': 'harry',
+'args': (
+'--bind=127.0.0.1:8081',
+'--workers=16',
+'--timeout=60',
+'hello:application',
+),
+}
+

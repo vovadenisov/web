@@ -1,0 +1,119 @@
+{%block register%}
+
+<!-- Modal -->
+            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel2">Регистрация</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <!-- старая регистрация -->
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <div class="row">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="lastName">login</label>
+                                                <div class="col-xs-9">
+                                                    <input type="text" class="form-control" id="lastName" placeholder="Введите логин">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="inputEmail">Email:</label>
+                                                <div class="col-xs-9">
+                                                    <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="inputPassword">Пароль:</label>
+                                                <div class="col-xs-9">
+                                                    <input type="password" class="form-control" id="inputPassword" placeholder="Введите пароль">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="confirmPassword">Подтвердите пароль:</label>
+                                                <div class="col-xs-9">
+                                                    <input type="password" class="form-control" id="confirmPassword" placeholder="Введите пароль ещё раз">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="inputFile">Аватар:</label>
+                                                <div class="col-xs-9">
+                                                    <input type="file" class="form-control" id="inputFile" placeholder="файл не выбран">
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group">
+                                                <div class="col-xs-offset-3 col-xs-9">
+                                                    <input type="submit" class="btn btn-primary" value="Регистрация">
+                                                    <input type="reset" class="btn btn-default" value="Очистить форму">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- старая регистрация -->
+                        </div>
+                        <div class="row">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- конец модального окна регистрации-->
+
+
+
+{%endblock register%}
+
+{%block login%}
+<!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Log in</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <div class="row">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="loginName">login</label>
+                                                <div class="col-xs-9">
+                                                    <input type="text" class="form-control" id="loginName" placeholder="Введите логин">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3" for="controlPassword">Пароль:</label>
+                                                <div class="col-xs-9">
+                                                    <input type="password" class="form-control" id="controlPassword" placeholder="Введите пароль">
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group">
+                                                <div class="col-xs-offset-3 col-xs-9">
+                                                    <input type="submit" class="btn btn-primary" value="Log in">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- конец модального окна логина-->
+{%endblock login%}

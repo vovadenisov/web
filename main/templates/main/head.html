@@ -1,0 +1,76 @@
+{%block head%}
+{%load staticfiles%}
+{%include "main/register.html"%}
+<div class="row topCol">
+    <div class="col-xs-3 logo">
+        <a href="{%url 'main:main'%}"><h1 class="wCol">Ask-Denisov</h1></a>
+    </div>
+
+    <!-- задать вопрос -->
+
+    <div class="col-xs-2 sear">
+        <!--location.href=/{%url 'main:ask'%}-->
+        <button type="button"  class="btn btn-success askBtn" onclick="location.pathname='{%url 'main:ask'%}'">Задать вопрос</button>
+    </div>
+
+    <!-- строка поиска -->
+
+    <div class="col-xs-3 sear">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Найти</button>
+        </form>
+    </div>
+    {%if user.is_authenticated %}
+    <!-- отдел вошедшего пользователя -->
+    <div class="col-xs-4">
+        <div class="row">
+            <!-- аватарка пользоваеля -->
+            <div class="col-xs-3 myAvTop">
+                <img src="{%static 'main/1.jpg'%}" class="img-thumbnail img-responsive myAvTop">
+            </div>
+            <!-- инфо пользоввателя имя, настройки, выйти -->
+            <div class="col-xs-8">
+                <div class="row">
+                    <a href=""><h2 class="userTName">{{request.user.username}}</h2></a>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 clearP">
+                        <a href="/user/{{profile.user.id}}"><p class="TopLogBtn">Settings</p></a>
+                    </div>
+                    <div class="col-xs-3 clearP">
+                        <a href=""><p class="TopLogBtn">log out</p></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- отдел не вошедшего пользователя -->
+    <div class="col-xs-4" >
+        <div class="row">
+            <!-- логинься или регайся -->
+            <!--<div class="col-xs-3 reit topMarg5"><a href=""><p class="TopLogBtn">Log in</p></a></div>-->
+            <!-- Button trigger modal -->
+            <div class="col-xs-3 reit topMarg5">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                    Log in
+                </button>
+            </div>
+            {%block login%}
+            {%endblock login%}
+            <div class="col-xs-3 reit topMarg5">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
+                    Registr
+                </button>
+            </div>
+            {%block register%}
+            {%endblock register%}
+            <!--<div class="col-xs-3 reit topMarg5"><a href="http://localhost/main/register"><p class="TopLogBtn">Register</p></a></div>-->
+        </div>
+    </div>
+    {% endif %}
+</div>
+{%endblock head%}
