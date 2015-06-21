@@ -132,6 +132,11 @@
     margin-top:2%;
 }
 
+.badUser{
+    text-align:center;
+    color:red;
+    font-size:20px
+}
 
 .none{
     display:none;

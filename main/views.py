@@ -1,12 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, HttpResponse
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator
-from main.models import Question, MyUser, Like, Tags, Answer
+from main.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import random
 import datetime
 from random import randrange
 from django.contrib.auth.decorators import login_required
+from django.contrib import auth
+from forms import *
 
 def getQuestion(request):
     if request.GET.get("tag"):
@@ -82,7 +84,7 @@ def user(request):
     }
     print prof
     return render(request, 'main/user.html', context)
-
+@login_required
 def ask(request):
     return render(request, 'main/ask.html')
 
@@ -125,5 +127,60 @@ def question(request, quest):
     else:
         return render(request, 'main/question.html')
 
-#def register(request):
-#    return render(request, 'main/register.html')
+def register(request):
+    return render(request, 'main/register.html')
+
+def signin(request):
+    return render(request, 'main/login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
+
+# def login(request):
+#     if request.POST:
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = auth.authenticate(username=username, password=password)
+#         if user is not None:
+#             auth.login(request, user)
+#             return HttpResponse('ok', imetype='text/html')
+#         else:
+#             return HttpResponse('bad Password!', mimetype='text/html')
+#             #return render(request)
+#     else:
+#         return HttpResponse('error', mimetype="text/html")
+
+def login(request):
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            return render(request, {'bad_user':True})
+    else:
+        return render(request, {'bad_user':True})
+
+def signup(request):
+    form = ProfileUser()
+    print('point1')
+    if request.POST:
+        form = ProfileUser(request.POST)
+        if form.is_valid():
+            print('point2')
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            email = form.cleaned_data.get("email")
+            u = User.objects.create(username=username, email = email)
+            u.set_password(password)
+            u.save()
+            m = MyUser.objects.create(user = u, rate = 0)
+            return redirect('/')
+        else:
+            print('point3')
+            return render(request, 'main/register.html', {'form': form})
+    print('point4')
+    return render(request, 'main/register.html', {'form': form})

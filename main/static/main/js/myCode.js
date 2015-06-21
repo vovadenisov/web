@@ -37,7 +37,7 @@ function validate_login_form ( )
 {
     valid = true;
 
-        if ( document.login_form.login.value == "" )
+        if ( document.login_form.username.value == "" )
         {
             document.getElementById("logName").className = "";
             valid = false;
@@ -93,3 +93,56 @@ function validate_ask ( )
         }
     return valid;
 }
+
+//function login(){
+//    if( validate_login_form() ){
+//        login = $("#loginName").val();
+//        password = $("#controlPassword").val();
+//        $.ajax({
+//        url : "/register/",
+//        type: "post",
+//        data:{
+//            'username': login,
+//            'password': password,
+//            },
+//        success: function(json){
+//                    if(json == 'ok'){
+//                        location.reload();
+//                    }
+//                    else{
+//                        location.reload();
+//                    }
+//                    }
+//                });
+//
+//    }
+//    else{
+//        return false;
+//    }
+//}
+
+
+$.ajaxSetup({
+         beforeSend: function(xhr, settings) {
+             function getCookie(name) {
+                 var cookieValue = null;
+                 if (document.cookie && document.cookie != '') {
+                     var cookies = document.cookie.split(';');
+                     for (var i = 0; i < cookies.length; i++) {
+                         var cookie = jQuery.trim(cookies[i]);
+                         // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+             }
+
+             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                 // Only send the token to relative URLs i.e. locally.
+                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+             }
+         }
+    });

@@ -1,6 +1,4 @@
-{%block head%}
 {%load staticfiles%}
-{%include "main/register.html"%}
 <div class="row topCol">
     <div class="col-xs-3 logo">
         <a href="{%url 'main:main'%}"><h1 class="wCol">Ask-Denisov</h1></a>
@@ -38,10 +36,10 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-3 clearP">
-                        <a href="/user/{{profile.user.id}}"><p class="TopLogBtn">Settings</p></a>
+                        <a href="/user/?user={{profile.user.id}}"><p class="TopLogBtn">Settings</p></a>
                     </div>
                     <div class="col-xs-3 clearP">
-                        <a href=""><p class="TopLogBtn">log out</p></a>
+                        <a href="{% url 'main:logout' %}"><p class="TopLogBtn">log out</p></a>
                     </div>
                 </div>
             </div>
@@ -55,22 +53,17 @@
             <!--<div class="col-xs-3 reit topMarg5"><a href=""><p class="TopLogBtn">Log in</p></a></div>-->
             <!-- Button trigger modal -->
             <div class="col-xs-3 reit topMarg5">
-                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{% url 'main:signin' %}'">
                     Log in
                 </button>
             </div>
-            {%block login%}
-            {%endblock login%}
             <div class="col-xs-3 reit topMarg5">
-                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
+                <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{% url 'main:register' %}'">
                     Registr
                 </button>
             </div>
-            {%block register%}
-            {%endblock register%}
             <!--<div class="col-xs-3 reit topMarg5"><a href="http://localhost/main/register"><p class="TopLogBtn">Register</p></a></div>-->
         </div>
     </div>
     {% endif %}
 </div>
-{%endblock head%}
