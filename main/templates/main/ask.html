@@ -11,37 +11,21 @@
                 <div class="row">
                     <div class="col-xs-10">
                         <div class="row">
-                            <form class="form-horizontal" name="ask_form" onsubmit="return validate_ask ( );">
+                            <form class="form-horizontal" name="ask_form" action="{% url 'main:add_quest' %}" onsubmit="return validate_ask ( );">
+                                {%csrf_token%}
+                                {% for i in form.visible_fields %}
                                 <div class="form-group">
-                                    <label class="control-label col-xs-3" for="title">Заголовок вопроса:</label>
+                                    <label class="control-label col-xs-3" for="id_{{i.name}}">{{i.label}}</label>
                                     <div class="col-xs-9">
-                                        <input type="text" class="form-control" name="titleAsk" id="title" placeholder="Заголовок вопроса">
-                                        <div class="none" id="titleName">
+                                        {{i}}
+                                        <!--<input type="text" class="form-control" name="titleAsk" id="title" placeholder="Заголовок вопроса">-->
+                                        <div class="{%if not i.error%} none {% endif %}" id="titleName">
                                             <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                                             <span class="sr-only">(error)</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="comment" class="control-label col-xs-3">Задайте свой вопрос:</label>
-                                    <div class="col-xs-9">
-                                        <textarea class="form-control" rows="15" name="contentAsk" id="comment"></textarea>
-                                        <div class="none" id="askContent">
-                                            <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                                            <span class="sr-only">(error)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-xs-3" for="Tegs">Теги:</label>
-                                    <div class="col-xs-9">
-                                        <input type="text" class="form-control" name="tagsAsk" id="Tegs" placeholder="Теги вопроса">
-                                        <div class="none" id="tagsAskId">
-                                            <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                                            <span class="sr-only">(error)</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                {%endfor%}
                                 <br />
                                 <div class="form-group">
                                     <div class="col-xs-offset-3 col-xs-9">

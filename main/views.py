@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator
 from main.models import *
@@ -9,6 +9,7 @@ from random import randrange
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from forms import *
+from django.utils import timezone
 
 def getQuestion(request):
     if request.GET.get("tag"):
@@ -84,9 +85,30 @@ def user(request):
     }
     print prof
     return render(request, 'main/user.html', context)
-@login_required
+
+@login_required(login_url='/login/')
 def ask(request):
-    return render(request, 'main/ask.html')
+    form = Add_question()
+    return render(request, 'main/ask.html', {'form': form})
+
+def add(request):
+    if request.user.is_authenticated:
+        if request.POST:
+            form = Add_question(request)
+            if form.is_valid():
+                title = form.cleaned_data.get('title')
+                content = form.cleaned_data.get('content')
+                tags = form.cleanef_fata.get('tags')
+                tags = tags.split(', ')
+                user = request.user
+                q = Question.objects.create(title = title, question_text = content,user = user, pubDate = timezone.now(),raiting = 0)
+                for i in tags:
+                    tag = Tags.objects.get(tag = i)
+                    if tag is None:
+                        tag.object.create(tag = i)
+
+        else:
+            return redirect('/')
 
 def question(request, quest):
     num_page = request.GET.get('page')
@@ -152,17 +174,22 @@ def logout(request):
 #         return HttpResponse('error', mimetype="text/html")
 
 def login(request):
-    if request.POST:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None:
-            auth.login(request, user)
-            return redirect('/')
+    if not request.user.is_authenticated():
+        if request.POST:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                # url = request.POST.get('next')
+                # print url
+                return HttpResponseRedirect('/')
+            else:
+                return render(request, {'bad_user':True})
         else:
             return render(request, {'bad_user':True})
     else:
-        return render(request, {'bad_user':True})
+        return redirect('/')
 
 def signup(request):
     form = ProfileUser()
