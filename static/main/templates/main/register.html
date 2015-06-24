@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{%load staticfiles%}
+{%block content%}
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel2">Регистрация</h4>
+        </div>
+        <div class="modal-body">
+
+            <!-- старая регистрация -->
+            <div class="row">
+                <div class="col-xs-10">
+                    <div class="row">
+                        <form class="form-horizontal" name="register_form" method="post" onsubmit="return validate_register_form ( );">
+                            {% csrf_token %}
+                            {% for i in form.visible_fields %}
+                            <div class="form-group">
+                                <label class="control-label col-xs-3" for="id_{{i.name}}">{{i.label}}</label>
+                                <div class="col-xs-9">
+                                    {{i}}
+                                    <div class="{% if not i.errors %} none {%endif%}" id="failName">
+                                        <span class="glyphicon glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <br />
+                            <div class="form-group">
+                                <div class="col-xs-offset-3 col-xs-9">
+                                    <input type="submit" class="btn btn-primary" value="Регистрация">
+                                    <input type="reset" class="btn btn-default" value="Очистить форму">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- старая регистрация -->
+        </div>
+    </div>
+{%endblock%}

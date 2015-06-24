@@ -59,6 +59,7 @@ def main(request):
     for i in range(int(num_page)-4, int(num_page)+4):
         if i in q.page_range:
             k.append(i)
+    user = request.user
     context = {
         "profile": prof,
         "questions":  page,
@@ -86,29 +87,43 @@ def user(request):
     print prof
     return render(request, 'main/user.html', context)
 
-@login_required(login_url='/login/')
+@login_required(login_url='/signin/')
 def ask(request):
     form = Add_question()
     return render(request, 'main/ask.html', {'form': form})
 
 def add(request):
     if request.user.is_authenticated:
+        print 0
         if request.POST:
-            form = Add_question(request)
+            print 1
+            form = Add_question(request.POST)
             if form.is_valid():
-                title = form.cleaned_data.get('title')
-                content = form.cleaned_data.get('content')
-                tags = form.cleanef_fata.get('tags')
-                tags = tags.split(', ')
-                user = request.user
-                q = Question.objects.create(title = title, question_text = content,user = user, pubDate = timezone.now(),raiting = 0)
-                for i in tags:
-                    tag = Tags.objects.get(tag = i)
-                    if tag is None:
-                        tag.object.create(tag = i)
+                form.save()
+                # print 'point1'
+                # title = form.cleaned_data.get('title')
+                # content = form.cleaned_data.get('content')
+                # tags = form.cleaned_data.get('tags')
+                # tags = tags.split(', ')
+                # user = request.user
+                # q = Question.objects.create(title = title, question_text = content,user = user, pubDate = timezone.now())
+                # print 'point2 '+q.title
 
+                # for i in tags:
+                #     try:
+                #         tag = Tags.objects.get(tag = i)
+                #     except Tags.DoesNotExist, a:
+                #         tag = Tags.objects.create(tag = i)
+                #     print i
+                #     q.tags_set.add(tag)
+                return redirect('/')
+            else:
+                print 3
+                return render(request, 'main/ask.html', {'form':form})
         else:
-            return redirect('/')
+            form = Add_question()
+            print 4
+            return render(request, 'main/ask.html', {'form' : form})
 
 def question(request, quest):
     num_page = request.GET.get('page')
@@ -175,19 +190,19 @@ def logout(request):
 
 def login(request):
     if not request.user.is_authenticated():
+        form = singin_form();
         if request.POST:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = auth.authenticate(username=username, password=password)
-            if user is not None:
-                auth.login(request, user)
-                # url = request.POST.get('next')
-                # print url
-                return HttpResponseRedirect('/')
-            else:
-                return render(request, {'bad_user':True})
-        else:
-            return render(request, {'bad_user':True})
+            form = singin_form(request.POST)
+            if form.is_valid():
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                user = auth.authenticate(username=username, password=password)
+                if user is not None:
+                    auth.login(request, user)
+                    # url = request.POST.get('next')
+                    # print url
+                    return HttpResponseRedirect('/')
+            return render(request,'main/login.html', {'form':form, 'bad_user':True})
     else:
         return redirect('/')
 
@@ -195,16 +210,18 @@ def signup(request):
     form = ProfileUser()
     print('point1')
     if request.POST:
-        form = ProfileUser(request.POST)
+        form = ProfileUser(request.POST, request.FILES)
         if form.is_valid():
+            form.save()
             print('point2')
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            email = form.cleaned_data.get("email")
-            u = User.objects.create(username=username, email = email)
-            u.set_password(password)
-            u.save()
-            m = MyUser.objects.create(user = u, rate = 0)
+            # username = form.cleaned_data.get('username')
+            # password = form.cleaned_data.get('password')
+            # email = form.cleaned_data.get("email")
+            # u = User.objects.create(username=username, email = email)
+            # u.set_password(password)
+            # u.save()
+            # picture = form.cleaned_data.get('img')
+            # m = MyUser.objects.create(user = u, rate = 0, img = picture)
             return redirect('/')
         else:
             print('point3')

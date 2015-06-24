@@ -1,0 +1,13 @@
+<div class = "row">
+
+    <ul class="list-unstyled myTags">
+        <li> Тэги: </li>
+        {%for tag in mytag %}
+            <li><a href="/?tag={{tag}}">{{tag}}</a></li>
+        {%endfor%}
+        <li> Лучшие пользователи:</li>
+        {%for members in bastMemb %}
+            <li><a href="/user/?user={{members.user.id}}">{{members.user.username}}</a></li>
+        {%endfor%}
+    </ul>
+</div>

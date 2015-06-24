@@ -1,0 +1,1 @@
+sudo gunicorn -c gunicorn.config.py hello:application

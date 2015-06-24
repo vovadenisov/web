@@ -1,0 +1,101 @@
+{% extends "main/base.html" %}
+{%load staticfiles%}
+{%block content%}
+<div class="row ask backAsk">
+    <div class="col-xs-3">
+        <!-- аватарка по идее грузится из аплоадса -->
+        <div class="row myAvPage">
+            <img src="{%static 'main/1.jpg'%}" class="img-thumbnail img-responsive">
+        </div>
+        <!-- под аватаркой кнопочки и рейтинг -->
+        <div class="row">
+            <div class="col-xs-4">
+                <button type="button" class="btn btn-danger lLaik">-</button>
+            </div>
+            <div class="col-xs-4">
+                <div class="reit">
+                    <p align="center">{{question.rating}}</p>
+                </div>
+            </div>
+            <div class="col-xs-4 ">
+                <button type="button" class="btn btn-success rLaik">+</button>
+            </div>
+        </div>
+    </div>
+    <!-- сам вопрос и пространство под ним -->
+    <div class="col-xs-9">
+        <div class="row"><h2 class="clearM">{{question.title}}</h2></div>
+        <div class="row">
+            <p class="ques">{{question.question_text}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="row backAsk topMarg5">
+        <!-- ответы -->
+        {%for answer in answers%}
+        <div class="row  answer">
+            <div class="col-xs-12">
+                <div class="col-xs-3">
+                    <!-- аватарка по идее грузится из аплоадса -->
+                    <div class="row myAvPage">
+                        <img src="{%static 'main/1.jpg'%}" class="img-thumbnail img-responsive">
+                    </div>
+                    <!-- под аватаркой кнопочки и рейтинг -->
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-danger lLaik">-</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="reit">
+                                <p align="center">1000</p>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 ">
+                            <button type="button" class="btn btn-success rLaik">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- сам вопрос и пространство под ним -->
+                <div class="col-xs-9">
+                        <div class="row ansText">
+                            <p class="ques">
+                                {{answer.ansText}}
+                            </p>
+                        </div>
+
+                </div>
+                <div class="row bestAns">
+                    <a><p>лучший ответ</p></a>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+
+
+<!-- пагинатор -->
+<div class="pagMarg">
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{%endblock content%}

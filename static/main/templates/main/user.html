@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="row ask backAsk">
+    <div class="col-xs-3">
+        <!-- аватарка по идее грузится из аплоадса -->
+        <div class="row myAvPage">
+            <img  src="{%static 'main/1.jpg'%}" class="img-thumbnail img-responsive myAvIm">
+        </div>
+        <!-- под аватаркой кнопочки и рейтинг -->
+    </div>
+    <!-- сам вопрос и пространство под ним -->
+    <div class="col-xs-9">
+        <!-- url 'main:question' -->
+        <div class="row"><h2 class="clearM">Ваш профиль</h2></div>
+        <div class="row">
+            <p class="ques">{{ this.user.username }}</p>
+            <p class="ques">{{ this.user.email }}</p>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

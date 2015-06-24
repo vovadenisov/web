@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-xs-10">
                     <div class="row">
-                        <form class="form-horizontal" name="register_form" method="post" onsubmit="return validate_register_form ( );">
+                        <form class="form-horizontal" enctype="multipart/form-data" name="register_form" method="post" onsubmit="return validate_register_form ( );">
                             {% csrf_token %}
                             {% for i in form.visible_fields %}
                             <div class="form-group">

@@ -1,0 +1,72 @@
+{% extends "main/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+{% for q in questions %}
+<div class="row ask backAsk">
+    <div class="col-xs-3">
+        <!-- аватарка по идее грузится из аплоадса -->
+        <div class="row myAvPage">
+            <img  src="{%static 'main/1.jpg'%}" class="img-thumbnail img-responsive myAvIm">
+        </div>
+        <!-- под аватаркой кнопочки и рейтинг -->
+        <div class="row">
+            <div class="col-xs-4 ">
+                <button type="button" class="btn btn-danger lLaik">-</button>
+            </div>
+            <div class="col-xs-4">
+                <div class="reit">
+                    <p align="center">{{q.rating}}</p>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <button type="button" class="btn btn-success rLaik">+</button>
+            </div>
+        </div>
+    </div>
+    <!-- сам вопрос и пространство под ним -->
+    <div class="col-xs-9">
+        <!-- url 'main:question' -->
+        <div class="row"><a href="/question/{{ q.id }}/"><h2 class="clearM">{{q.title}}</h2></a></div>
+        <div class="row">
+            <p class="ques">{{ q.question_text }}</p>
+        </div>
+        <div class="row">
+            <div class="col-xs-3"><a href="/question/{{ q.id }}/">Answer({{q.count}})</a></div>
+
+            <div class="col-xs-5">
+                <p>
+                    Tags:
+                {% for tag in q.tags%}
+                    <a href="/?tag={{tag.tag}}">{{tag.tag}}</a>,
+                {%endfor%}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="pagMarg">
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endblock content %}
+

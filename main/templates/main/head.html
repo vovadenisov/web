@@ -27,12 +27,12 @@
         <div class="row">
             <!-- аватарка пользоваеля -->
             <div class="col-xs-3 myAvTop">
-                <img src="{%static 'main/1.jpg'%}" class="img-thumbnail img-responsive myAvTop">
+                <img src="{{user.myuser.img.url}}" class="img-thumbnail img-responsive myAvTop">
             </div>
             <!-- инфо пользоввателя имя, настройки, выйти -->
             <div class="col-xs-8">
                 <div class="row">
-                    <a href=""><h2 class="userTName">{{request.user.username}}</h2></a>
+                    <a href="/user/?user={{profile.user.id}}"><h2 class="userTName">{{user}}</h2></a>
                 </div>
                 <div class="row">
                     <div class="col-xs-3 clearP">
