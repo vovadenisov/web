@@ -1,4 +1,4 @@
-from time import timezone
+from django.utils import timezone
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import validate_email, ValidationError
@@ -80,28 +80,34 @@ class Add_question(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control',	'placeholder': 'Details here','rows':'5'}))
     tags = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Tags'}))
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(Add_question, self).__init__(*args, **kwargs)
+
     def clean_title(self):
         print ('title 0')
-        if self.cleaned_data.get('title'):
-            print ('title')
+        title = self.cleaned_data.get('title')
+        if not title:
             raise ValidationError('empty title')
+        return title
 
     def clean_content(self):
-        if self.cleaned_data.get('content'):
-            print ('content')
+        content = self.cleaned_data.get('content')
+        if not content:
             raise ValidationError('empty content')
+        return content
 
     def clean_tags(self):
         tags = self.cleaned_data.get('tags')
         tags = tags.split(', ')
         if len(tags) < 3:
             raise ValidationError('Need more tags')
+        return tags
 
     def save(self):
         title = self.cleaned_data.get('title')
         content = self.cleaned_data.get('content')
         tags = self.cleaned_data.get('tags')
-        tags = tags.split(', ')
         user = self.request.user
         q = Question.objects.create(title = title, question_text = content,user = user, pubDate = timezone.now())
         for i in tags:
@@ -111,11 +117,11 @@ class Add_question(forms.Form):
                 tag = Tags.objects.create(tag = i)
             print i
             q.tags_set.add(tag)
+        return q
 
 def handleUploadedFile(f):
 	# Generate random name
 	new_filename = "%s.%s" % (User.objects.make_random_password(10), f.name.split('.')[-1])
-
 	filename = os.path.dirname(os.path.dirname(__file__)) + '/uploads/' + new_filename
 	with open(filename, 'wb') as destination:
 		destination.write(f.read())

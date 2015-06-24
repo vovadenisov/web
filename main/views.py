@@ -25,30 +25,36 @@ def getQuestion(request):
 def main(request):
     question = getQuestion(request)
     q = Paginator(question,10)
-    num_page = request.GET.get('page')
-    if request.user.is_authenticated():
-        prof = MyUser.objects.get(user_id=request.user.id)
+    if request.GET:
+        num_page = request.GET.get('page')
+        try:
+            page = q.page(num_page)
+        except PageNotAnInteger:
+            page = q.page(1)
+            print 'PageNotAnInteger'
+            num_page = 1
+        except EmptyPage:
+            page = q.page(q.num_pages)
+            num_page = q.num_pages
+            print 'empty'
+            print num_page
     else:
-        prof = ""
-    try:
-        page = q.page(num_page)
-    except PageNotAnInteger:
-        page = q.page(1)
         num_page = 1
-    except EmptyPage:
-        page = q.page(q.num_pages)
-        num_page = q.num_pages
+        page = q.page(num_page)
+
+    last_page = len(q.page_range)
+
     for quest in page:
         quest.count = quest.answer_set.count()
         quest.tags = quest.tags_set.all()
-        if prof != "":
-            like = Like.objects.filter(question = quest, author  = prof)
-            if like.exists():
-                quest.voice = 0
-            else:
-                quest.voice = 1
-        else:
-            quest.voice = 1
+        # if request.user.is_authenticated:
+            # like = Like.objects.filter(question = quest, author  = request.user)
+            # if like.exists():
+            #     quest.voice = 0
+            # else:
+            #     quest.voice = 1
+        # else:
+        #     quest.voice = 1
 
     tag = Tags.objects.all()[:10]
     members = MyUser.objects.select_related("user").all().order_by('-rate')[:10]
@@ -61,12 +67,14 @@ def main(request):
             k.append(i)
     user = request.user
     context = {
-        "profile": prof,
-        "questions":  page,
-        "paginators": k,
-        "all_pages": q.num_pages,
-        "mytag": tag,
-        "bastMemb": members,
+        # "profile": prof,
+        'actual_page': num_page,
+        'last_page': last_page,
+        'questions':  page,
+        'paginators': k,
+        'all_pages': q.num_pages,
+        'mytag': tag,
+        'bastMemb': members,
     }
     return render(request, 'main/content.html', context)
 
@@ -97,25 +105,9 @@ def add(request):
         print 0
         if request.POST:
             print 1
-            form = Add_question(request.POST)
+            form = Add_question(request.POST, request = request or None)
             if form.is_valid():
                 form.save()
-                # print 'point1'
-                # title = form.cleaned_data.get('title')
-                # content = form.cleaned_data.get('content')
-                # tags = form.cleaned_data.get('tags')
-                # tags = tags.split(', ')
-                # user = request.user
-                # q = Question.objects.create(title = title, question_text = content,user = user, pubDate = timezone.now())
-                # print 'point2 '+q.title
-
-                # for i in tags:
-                #     try:
-                #         tag = Tags.objects.get(tag = i)
-                #     except Tags.DoesNotExist, a:
-                #         tag = Tags.objects.create(tag = i)
-                #     print i
-                #     q.tags_set.add(tag)
                 return redirect('/')
             else:
                 print 3
@@ -199,8 +191,6 @@ def login(request):
                 user = auth.authenticate(username=username, password=password)
                 if user is not None:
                     auth.login(request, user)
-                    # url = request.POST.get('next')
-                    # print url
                     return HttpResponseRedirect('/')
             return render(request,'main/login.html', {'form':form, 'bad_user':True})
     else:
@@ -208,23 +198,11 @@ def login(request):
 
 def signup(request):
     form = ProfileUser()
-    print('point1')
     if request.POST:
         form = ProfileUser(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            print('point2')
-            # username = form.cleaned_data.get('username')
-            # password = form.cleaned_data.get('password')
-            # email = form.cleaned_data.get("email")
-            # u = User.objects.create(username=username, email = email)
-            # u.set_password(password)
-            # u.save()
-            # picture = form.cleaned_data.get('img')
-            # m = MyUser.objects.create(user = u, rate = 0, img = picture)
             return redirect('/')
         else:
-            print('point3')
             return render(request, 'main/register.html', {'form': form})
-    print('point4')
     return render(request, 'main/register.html', {'form': form})
