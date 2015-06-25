@@ -132,6 +132,11 @@
     margin-top:2%;
 }
 
+.active{
+    background-color: antiquewhite;
+}
+
+
 .badUser{
     text-align:center;
     color:red;
@@ -140,4 +145,8 @@
 
 .none{
     display:none;
+}
+
+.row p{
+    word-wrap: break-word;
 }

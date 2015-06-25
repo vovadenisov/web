@@ -1,15 +1,13 @@
-from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect, get_object_or_404
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator
 from main.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import random
-import datetime
-from random import randrange
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from forms import *
-from django.utils import timezone
+
+from django.core.urlresolvers import reverse
 
 def getQuestion(request):
     if request.GET.get("tag"):
@@ -42,22 +40,19 @@ def main(request):
         num_page = 1
         page = q.page(num_page)
 
-    last_page = len(q.page_range)
+    last_page = q.num_pages
 
     for quest in page:
         quest.count = quest.answer_set.count()
         quest.tags = quest.tags_set.all()
         # if request.user.is_authenticated:
-            # like = Like.objects.filter(question = quest, author  = request.user)
-            # if like.exists():
-            #     quest.voice = 0
-            # else:
-            #     quest.voice = 1
+        # like = Like.objects.filter(question = quest)
+        #     if like.exists():
+        #         quest.voice = 0
+        #     else:
+        # quest.voice = 1
         # else:
         #     quest.voice = 1
-
-    tag = Tags.objects.all()[:10]
-    members = MyUser.objects.select_related("user").all().order_by('-rate')[:10]
 
     # print members.user.username
 
@@ -65,7 +60,11 @@ def main(request):
     for i in range(int(num_page)-4, int(num_page)+4):
         if i in q.page_range:
             k.append(i)
-    user = request.user
+
+    if last_page <= 1:
+        is_paginator = False
+    else:
+        is_paginator = True
     context = {
         # "profile": prof,
         'actual_page': num_page,
@@ -73,9 +72,10 @@ def main(request):
         'questions':  page,
         'paginators': k,
         'all_pages': q.num_pages,
-        'mytag': tag,
-        'bastMemb': members,
+        'is_paginator': is_paginator
     }
+    default = get_default_context()
+    context.update(default)
     return render(request, 'main/content.html', context)
 
 def user(request):
@@ -98,69 +98,88 @@ def user(request):
 @login_required(login_url='/signin/')
 def ask(request):
     form = Add_question()
-    return render(request, 'main/ask.html', {'form': form})
+    default = get_default_context()
+    content = {'form': form}
+    content.update(default)
+    return render(request, 'main/ask.html', content)
 
 def add(request):
     if request.user.is_authenticated:
-        print 0
+        default = get_default_context()
         if request.POST:
-            print 1
             form = Add_question(request.POST, request = request or None)
             if form.is_valid():
                 form.save()
                 return redirect('/')
             else:
                 print 3
-                return render(request, 'main/ask.html', {'form':form})
+                return render(request, 'main/ask.html', default.update({'form':form}))
         else:
             form = Add_question()
             print 4
-            return render(request, 'main/ask.html', {'form' : form})
+            return render(request, 'main/ask.html', default.update({'form' : form}))
 
 def question(request, quest):
-    num_page = request.GET.get('page')
-
-    question = Question.objects.all().get(id=int(quest))
+    # if request.POST:
+    #     form = answer_form(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #     else:
+    #
+    form = answer_form()
+    if request.GET:
+        num_page = request.GET.get('page')
+    else:
+        num_page = 1
+    question = get_object_or_404(Question, id=int(quest))
 
     answers = question.answer_set.all()
-    # answers = Answer.objects.all().filter(question = int(quest))
     p = Paginator(answers, 5)
     try:
         page = p.page(num_page)
     except PageNotAnInteger:
         page = p.page(1)
+        num_page = 1
     except EmptyPage:
         page = p.page(p.num_pages)
+        num_page = p.num_pages
+    last_page = p.num_pages
 
-    if request.user.is_authenticated():
-        prof = MyUser.objects.get(user_id=request.user.id);
+    k=[]
+
+    for i in range(int(num_page)-4, int(num_page)+4):
+        if i in p.page_range:
+            k.append(i)
+
+    if last_page <= 1:
+        is_paginator = False
     else:
-        prof = ""
-
-    tag = Tags.objects.all()[:10]
-    members = MyUser.objects.select_related("user").all().order_by('-rate')[:10]
-
+        is_paginator = True
     context = {
         "question": question,
         "count": question.answer_set.count(),
         "tags": question.tags_set.all(),
         "answers" : page,
-        "profile" : prof,
-        "likes" : question.like_set.count(),
-        "mytag": tag,
-        "bastMemb": members,
+        'is_paginator': is_paginator,
+        'last-page': last_page,
+        'paginator': k,
+        "likes": question.like_set.count(),
+        'form':form
     }
-
+    default = get_default_context()
+    context.update(default)
     if context["question"]:
         return render(request, 'main/question.html', context)
     else:
-        return render(request, 'main/question.html')
+        return render(request, 'main/question.html', default)
 
 def register(request):
-    return render(request, 'main/register.html')
+    context = get_default_context()
+    return render(request, 'main/register.html', context)
 
 def signin(request):
-    return render(request, 'main/login.html')
+    context = get_default_context()
+    return render(request, 'main/login.html', context)
 
 def logout(request):
     auth.logout(request)
@@ -182,7 +201,13 @@ def logout(request):
 
 def login(request):
     if not request.user.is_authenticated():
-        form = singin_form();
+        default = get_default_context()
+        form = singin_form()
+        context = {
+            'form':form,
+            'bad_user':True
+        }
+        context.update(default)
         if request.POST:
             form = singin_form(request.POST)
             if form.is_valid():
@@ -192,17 +217,96 @@ def login(request):
                 if user is not None:
                     auth.login(request, user)
                     return HttpResponseRedirect('/')
-            return render(request,'main/login.html', {'form':form, 'bad_user':True})
+            return render(request,'main/login.html', context)
     else:
         return redirect('/')
 
-def signup(request):
-    form = ProfileUser()
+@login_required(login_url='/signin/')
+def correct_Email(request):
+    form = correct_Email_form()
+    context = {
+        'form': form,
+        'btn': 'change'
+    }
+    default = get_default_context()
+    context.update(default)
     if request.POST:
-        form = ProfileUser(request.POST, request.FILES)
+        form = correct_Email_form(request.POST, request.FILES, request = request or None)
+        context['form'] = form
         if form.is_valid():
             form.save()
             return redirect('/')
         else:
-            return render(request, 'main/register.html', {'form': form})
-    return render(request, 'main/register.html', {'form': form})
+            return render(request, 'main/register.html', context)
+    return render(request, 'main/register.html', context)
+
+@login_required(login_url='/signin/')
+def correct(request):
+    default = get_default_context()
+    return render(request, 'main/correct.html', default)
+
+
+@login_required(login_url='/signin/')
+def correct_password(request):
+    default = get_default_context()
+    form = correct_password_form()
+    context = {
+        'form': form,
+        'btn': 'change'
+    }
+    context.update(default)
+    if request.POST:
+        form = correct_password_form(request.POST, request.FILES, request = request or None)
+        context['form'] = form
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, 'main/register.html', context)
+    return render(request, 'main/register.html', context)
+
+@login_required(login_url='/signin/')
+def correct_img(request):
+    default = get_default_context()
+    form = correct_img_form()
+    context = {
+        'form': form,
+        'btn': 'change'
+    }
+    context.update(default)
+    if request.POST:
+        form = correct_img_form(request.POST, request.FILES, request = request or None)
+        context['form']=form
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, 'main/register.html', context)
+    return render(request, 'main/register.html', context)
+
+def signup(request):
+    form = ProfileUser()
+    context = {
+        'form': form,
+        'btn': 'Register'
+    }
+    default = get_default_context()
+    context.update(default)
+    if request.POST:
+        form = ProfileUser(request.POST, request.FILES)
+        context['form']=form
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, 'main/register.html', context)
+    return render(request, 'main/register.html', context)
+
+def get_default_context():
+    tag = Tags.objects.all()[:10]
+    members = MyUser.objects.select_related("user").all().order_by('-rate')[:10]
+    default_context = {
+        "mytag": tag,
+        "bastMemb": members,
+    }
+    return default_context

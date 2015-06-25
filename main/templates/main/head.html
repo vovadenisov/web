@@ -32,11 +32,11 @@
             <!-- инфо пользоввателя имя, настройки, выйти -->
             <div class="col-xs-8">
                 <div class="row">
-                    <a href="/user/?user={{profile.user.id}}"><h2 class="userTName">{{user}}</h2></a>
+                    <a href="/user/?user={{user.id}}"><h2 class="userTName">{{user}}</h2></a>
                 </div>
                 <div class="row">
                     <div class="col-xs-3 clearP">
-                        <a href="/user/?user={{profile.user.id}}"><p class="TopLogBtn">Settings</p></a>
+                        <a href="{% url 'main:correct' %}"><p class="TopLogBtn">Settings</p></a>
                     </div>
                     <div class="col-xs-3 clearP">
                         <a href="{% url 'main:logout' %}"><p class="TopLogBtn">log out</p></a>

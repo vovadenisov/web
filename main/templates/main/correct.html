@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div style="text-align:center;">
+    <div class="row">
+        <a href="{% url 'main:correct_email' %}"><div class="btn btn-primary col-md-5" style="margin-top:5%; margin-left:25%;"><p style="font-size:20px; margin:auto">Редактировать Email</p></div></a>
+    </div>
+    <div class="row">
+        <a href="{% url 'main:correct_password' %}"><div class="btn btn-primary col-md-5" style="margin-top:5%; margin-left:25%;"><p style="font-size:20px; margin:auto">Редактировать пароль</p></div></a>
+    </div>
+    <div class="row">
+        <a href="{% url 'main:correct_img' %}"><div class="btn btn-primary col-md-5" style="margin-top:5%; margin-left:25%;"><p style="font-size:20px; margin:auto">Редактировать картинку</p></div></a>
+    </div>
+</div>
+
+{% endblock %}
